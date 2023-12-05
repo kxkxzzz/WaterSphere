@@ -166,6 +166,9 @@ int main() {
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
+	sphereShader.use();
+	sphereShader.setInt("skybox", 0);
+
 	while (!glfwWindowShouldClose(window)) {
 		float currentFrame = (float) glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
@@ -187,7 +190,12 @@ int main() {
 		sphereShader.setMat4("model", model);
 		sphereShader.setMat4("view", view);
 		sphereShader.setMat4("projection", projection);
+
+		sphereShader.setVec3("cameraPos", camera.Position);
+
 		glBindVertexArray(sphereVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 		glDrawElements(GL_TRIANGLES, sphere.getNumIndices(), GL_UNSIGNED_INT, 0);
 
 		// draw skybox
