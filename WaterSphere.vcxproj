@@ -138,10 +138,12 @@
     <ClInclude Include="include\tools\camera.h" />
     <ClInclude Include="include\tools\checkError.h" />
     <ClInclude Include="include\tools\shaders.h" />
+    <ClInclude Include="include\tools\Sphere.h" />
     <ClInclude Include="include\tools\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\Sphere.cpp" />
     <ClCompile Include="src\waterBall.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 #include "shaders.h"
 #include "camera.h"
 #include "checkError.h"
+#include "Sphere.h"
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
@@ -35,8 +36,8 @@ float lastFrame = 0.0f;
 
 const std::string skyBoxVShaderSrc = "shader/skybox.vs";
 const std::string skyBoxFShaderSrc = "shader/skybox.fs";
-const std::string ballVShaderSrc = "shader/ball.vs";
-const std::string ballFShaderSrc = "shader/ball.fs";
+const std::string sphereVShaderSrc = "shader/sphere.vs";
+const std::string sphereFShaderSrc = "shader/sphere.fs";
 
 
 const std::vector<std::string> skyboxTextSrc {
@@ -70,52 +71,7 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 
 	Shader skyboxShader(skyBoxVShaderSrc.c_str(), skyBoxFShaderSrc.c_str());
-
-
-	GLfloat cubeVertices[] = {
-		// positions         // normals    // texture coords
-		-0.5f, -0.5f, -0.5f, 0.0f,  0.0f,  -1.0f, 0.0f, 0.0f,  //
-		0.5f,  -0.5f, -0.5f, 0.0f,  0.0f,  -1.0f, 1.0f, 0.0f,  //
-		0.5f,  0.5f,  -0.5f, 0.0f,  0.0f,  -1.0f, 1.0f, 1.0f,  //
-		0.5f,  0.5f,  -0.5f, 0.0f,  0.0f,  -1.0f, 1.0f, 1.0f,  //
-		-0.5f, 0.5f,  -0.5f, 0.0f,  0.0f,  -1.0f, 0.0f, 1.0f,  //
-		-0.5f, -0.5f, -0.5f, 0.0f,  0.0f,  -1.0f, 0.0f, 0.0f,  //
-
-		-0.5f, -0.5f, 0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  //
-		0.5f,  -0.5f, 0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,  //
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  //
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  //
-		-0.5f, 0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,  //
-		-0.5f, -0.5f, 0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  //
-
-		-0.5f, 0.5f,  0.5f,  -1.0f, 0.0f,  0.0f,  1.0f, 0.0f,  //
-		-0.5f, 0.5f,  -0.5f, -1.0f, 0.0f,  0.0f,  1.0f, 1.0f,  //
-		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f,  0.0f,  0.0f, 1.0f,  //
-		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f,  0.0f,  0.0f, 1.0f,  //
-		-0.5f, -0.5f, 0.5f,  -1.0f, 0.0f,  0.0f,  0.0f, 0.0f,  //
-		-0.5f, 0.5f,  0.5f,  -1.0f, 0.0f,  0.0f,  1.0f, 0.0f,  //
-
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,  //
-		0.5f,  0.5f,  -0.5f, 1.0f,  0.0f,  0.0f,  1.0f, 1.0f,  //
-		0.5f,  -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  0.0f, 1.0f,  //
-		0.5f,  -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  0.0f, 1.0f,  //
-		0.5f,  -0.5f, 0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,  //
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,  //
-
-		-0.5f, -0.5f, -0.5f, 0.0f,  -1.0f, 0.0f,  0.0f, 1.0f,  //
-		0.5f,  -0.5f, -0.5f, 0.0f,  -1.0f, 0.0f,  1.0f, 1.0f,  //
-		0.5f,  -0.5f, 0.5f,  0.0f,  -1.0f, 0.0f,  1.0f, 0.0f,  //
-		0.5f,  -0.5f, 0.5f,  0.0f,  -1.0f, 0.0f,  1.0f, 0.0f,  //
-		-0.5f, -0.5f, 0.5f,  0.0f,  -1.0f, 0.0f,  0.0f, 0.0f,  //
-		-0.5f, -0.5f, -0.5f, 0.0f,  -1.0f, 0.0f,  0.0f, 1.0f,  //
-
-		-0.5f, 0.5f,  -0.5f, 0.0f,  1.0f,  0.0f,  0.0f, 1.0f,  //
-		0.5f,  0.5f,  -0.5f, 0.0f,  1.0f,  0.0f,  1.0f, 1.0f,  //
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,  //
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,  //
-		-0.5f, 0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,  //
-		-0.5f, 0.5f,  -0.5f, 0.0f,  1.0f,  0.0f,  0.0f, 1.0f  //
-	};
+	Shader sphereShader(sphereVShaderSrc.c_str(), sphereFShaderSrc.c_str());
 
 	GLfloat skyboxVertices[] = {
 		// positions
@@ -162,6 +118,39 @@ int main() {
 		 1.0f, -1.0f,  1.0f
 	};
 
+	Sphere sphere;
+
+	//std::cout << sphere.getNumVertices() << " " << sphere.getNumIndices() << "\n";
+
+	// sphere
+	GLuint sphereVAO, sphereVBO, sphereEBO;
+	glGenVertexArrays(1, &sphereVAO);
+	glGenBuffers(1, &sphereVBO);
+	glGenBuffers(1, &sphereEBO);
+
+	glBindVertexArray(sphereVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * sphere.getNumVertices(),
+		&sphere.vertices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * sphere.getNumIndices(),
+		&sphere.indices[0], GL_STATIC_DRAW);
+
+	{
+		GLuint aPosLoc = glGetAttribLocation(sphereShader.ID, "aPos");
+		GLuint aNormalLoc = glGetAttribLocation(sphereShader.ID, "aNormal");
+		//std::cout << aPosLoc << " " << aNormalLoc << " " << modelLoc;
+		sphereShader.use();
+		glEnableVertexAttribArray(aPosLoc);
+		glVertexAttribPointer(aPosLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) 0);
+
+		glEnableVertexAttribArray(aNormalLoc);
+		glVertexAttribPointer(aNormalLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+			(void*) offsetof(Vertex, normal));
+	}
+
 	// skybox
 	GLuint skyboxVAO, skyboxVBO;
 	glGenVertexArrays(1, &skyboxVAO);
@@ -194,7 +183,12 @@ int main() {
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
 			(float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
 
-
+		sphereShader.use();
+		sphereShader.setMat4("model", model);
+		sphereShader.setMat4("view", view);
+		sphereShader.setMat4("projection", projection);
+		glBindVertexArray(sphereVAO);
+		glDrawElements(GL_TRIANGLES, sphere.getNumIndices(), GL_UNSIGNED_INT, 0);
 
 		// draw skybox
 		glDepthFunc(GL_LEQUAL);
