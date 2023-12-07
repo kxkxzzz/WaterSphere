@@ -35,6 +35,8 @@ vec3 culRefractLight()
     vec3 N = normalize(Normal);
     vec3 I = normalize(Position - cameraPos);
     vec3 T = refract(I, N, 0.66);
+    // vec3 T = refract(I, N, 0.8);
+    // vec3 T = refract(I, N, 0.95);
 
     vec4 refractedColor = texture(skybox, T);
     return vec3(refractedColor.rgb);
