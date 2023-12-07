@@ -147,10 +147,10 @@
     <ClCompile Include="src\waterBall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\skybox.fs" />
-    <None Include="shader\skybox.vs" />
-    <None Include="shader\sphere.fs" />
-    <None Include="shader\sphere.vs" />
+    <None Include="shader\skybox.frag" />
+    <None Include="shader\skybox.vert" />
+    <None Include="shader\sphere.frag" />
+    <None Include="shader\sphere.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

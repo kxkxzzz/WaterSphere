@@ -34,10 +34,10 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 
-const std::string skyBoxVShaderSrc = "shader/skybox.vs";
-const std::string skyBoxFShaderSrc = "shader/skybox.fs";
-const std::string sphereVShaderSrc = "shader/sphere.vs";
-const std::string sphereFShaderSrc = "shader/sphere.fs";
+const std::string skyBoxVShaderSrc = "shader/skybox.vert";
+const std::string skyBoxFShaderSrc = "shader/skybox.frag";
+const std::string sphereVShaderSrc = "shader/sphere.vert";
+const std::string sphereFShaderSrc = "shader/sphere.frag";
 
 
 const std::vector<std::string> skyboxTextSrc {
