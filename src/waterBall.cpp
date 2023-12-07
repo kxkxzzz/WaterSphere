@@ -50,7 +50,7 @@ int main() {
 
 	glfwInit();
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "waterBall", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "waterSphere", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -186,6 +186,7 @@ int main() {
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
 			(float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
 
+
 		sphereShader.use();
 		sphereShader.setMat4("model", model);
 		sphereShader.setMat4("view", view);
@@ -193,6 +194,7 @@ int main() {
 
 		sphereShader.setVec3("cameraPos", camera.Position);
 
+		glDepthFunc(GL_LEQUAL);
 		glBindVertexArray(sphereVAO);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);

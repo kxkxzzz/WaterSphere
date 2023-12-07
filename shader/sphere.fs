@@ -9,15 +9,18 @@ uniform samplerCube skybox;
 
 vec3 culReflectLight();
 vec3 culRefractLight();
+float schlick(float cosine, float refractiveIndex); 
 
 void main()
 {             
     vec3 reflectColor = culReflectLight();
     vec3 refractColor = culRefractLight();
-    float alpha = 0.8;
-    
-    FragColor = vec4(mix(reflectColor, refractColor, alpha), alpha);
-    //FragColor = vec4(refractColor,1.0f);
+
+    vec3 N = normalize(Normal);
+    vec3 I = normalize(Position - cameraPos);
+
+    float reflectance = schlick(dot(N, -I), 1.33);
+    FragColor = vec4(mix(refractColor, reflectColor, reflectance * 0.8), 1.0);
 }
 
 vec3 culReflectLight()
@@ -35,4 +38,9 @@ vec3 culRefractLight()
 
     vec4 refractedColor = texture(skybox, T);
     return vec3(refractedColor.rgb);
+}
+
+float schlick(float cosine, float refractiveIndex){
+    float r0 = pow((1.0 - refractiveIndex) / (1.0 + refractiveIndex), 2.0);
+    return r0 + (1.0 - r0) * pow(1.0 - cosine, 5.0);
 }
